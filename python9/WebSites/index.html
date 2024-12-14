@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to the FastAPI CRUD App!</h1>
+    <a href="/users">Users</a><br>
+    <a href="/posts">Posts</a>
+
+    <h3>Users</h3>
+    <table style="display: block; margin: auto;">
+        <thead><tr><th>Username</th><th>Email</th><th>Password</th></tr></thead>
+        <tbody id="table">
+        </tbody>
+    </table>
+    <h3>Posts</h3>
+    <table style="display: block; margin: auto;">
+        <thead><tr><th>Title</th><th>Content</th><th>User(ID)</th></tr></thead>
+        <tbody id="table2">
+        </tbody>
+    </table>
+    <script>
+
+        async function getUsers() {
+            const response = await fetch("/SelectUser", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                // получаем данные
+                const users = await response.json();
+                const table = document.querySelector("#table");
+                users.forEach(user => table.insertAdjacentHTML("afterbegin", `<tr><th>${user["username"]}</th><th>${user["email"]}</th><th>${user["password"]}</th></tr>`));
+            }
+        }
+
+        async function getPosts() {
+            const response = await fetch("/SelectPosts", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                // получаем данные
+                const posts = await response.json();
+                const table = document.querySelector("#table2");
+                posts.forEach(user => table.insertAdjacentHTML("afterbegin", `<tr><th>${user["title"]}</th><th>${user["content"]}</th><th>${user["user_id"]}</th></tr><button name='user_id' value=${user["user_id"]} type='submit' onclick="DeleteUser(this)">Удалить по Пользователю</button>`));
+            }
+        }
+        async function DeleteUser(btn){
+        const user_id = btn.value;
+        const response = await fetch("/DeleteUser", {
+                method: "DELETE",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: user_id
+                })
+            });
+        }
+        getUsers();
+        getPosts();
+    </script>
+</body>
+</html>
