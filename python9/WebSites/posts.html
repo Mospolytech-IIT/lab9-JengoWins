@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+</head>
+<body>
+    <h1>Posts</h1>
+    <form action="/CreatePost" method="post" enctype=multipart/form-data>
+        <input type="text" name="title" placeholder="Title" required>
+        <textarea name="content" placeholder="Content" required></textarea>
+        <input type="number" name="user_id" placeholder="User ID" required>
+        <button type="submit">Create Post</button>
+    </form>
+
+</body>
+</html>
